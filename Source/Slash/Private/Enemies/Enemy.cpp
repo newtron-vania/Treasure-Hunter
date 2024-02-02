@@ -5,8 +5,11 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/AttributeComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "HUD/HealthBarComponent.h"
+#include "AIController.h"
+#include "NavigationPath.h"
 
 
 AEnemy::AEnemy()
@@ -22,7 +25,11 @@ AEnemy::AEnemy()
 	Attributes = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
 	HealthBarWidget = CreateDefaultSubobject<UHealthBarComponent>(TEXT("HealthBar"));
 	HealthBarWidget->SetupAttachment(GetRootComponent());
-	
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
 }
 
 void AEnemy::BeginPlay()
@@ -31,7 +38,23 @@ void AEnemy::BeginPlay()
 
 	SetHealthBarPercent();
 
-	HealthBarWidget->SetVisibility(false);
+	SetHealthBarVisible(false);
+
+	EnemyController = Cast<AAIController>(GetController());
+	if(EnemyController && PatrolTarget)
+	{
+		FAIMoveRequest MoveRequest;
+		MoveRequest.SetGoalActor(PatrolTarget);
+		MoveRequest.SetAcceptanceRadius(15.f);
+		FNavPathSharedPtr NavPath;
+		EnemyController->MoveTo(MoveRequest, &NavPath);
+		TArray<FNavPathPoint>& PathPoints = NavPath->GetPathPoints();
+		for(auto& point : PathPoints)
+		{
+			const FVector& Location = point.Location;
+			DrawDebugSphere(GetWorld(), Location, 25.f, 12, FColor::Green, false, 10.f);
+		}
+	}
 }
 
 //hitReact Montage 실행
@@ -55,19 +78,18 @@ void AEnemy::PlayDeathMontage()
 	{
 		UAnimMontage* Montage = DeathMontages[FMath::RandRange(0, DeathMontages.Num()-1)];
 		AnimInstance->Montage_Play(Montage);
-		
-		DeathPose = EDeathPose::EDP_Dead;
 	}
 }
 
 //Enemy Death 실행
 void AEnemy::Die()
 {
+	DeathPose = EDeathPose::EDP_Dead;
 	PlayDeathMontage();
-
+	
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	HealthBarWidget->SetVisibility(false);
+	SetHealthBarVisible(false);
 }
 
 void AEnemy::Tick(float DeltaTime)
@@ -159,10 +181,8 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
  */
 void AEnemy::GetHit_Implementation(const FVector& ImpactPoint)
 {
-	if(HealthBarWidget)
-	{
-		HealthBarWidget->SetVisibility(true);
-	}
+	SetHealthBarVisible(true);
+	
 	if(Attributes && Attributes->isAlive())
 	{
 		DirectionalHitReact(ImpactPoint);
@@ -205,6 +225,13 @@ void AEnemy::SetHealthBarPercent()
 	if(Attributes && HealthBarWidget)
 	{
 		HealthBarWidget->SetHealthPercent(Attributes->GetHealthPercent());
+	}
+}
+
+void AEnemy::SetHealthBarVisible(bool visible)
+{	if(HealthBarWidget)
+	{
+		HealthBarWidget->SetVisibility(visible);
 	}
 }
 
