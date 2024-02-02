@@ -8,6 +8,7 @@
 #include "Pawns/Characters/CharacterTypes.h"
 #include "Enemy.generated.h"
 
+class AAIController;
 class UHealthBarComponent;
 class UAnimMontage;
 class USoundBase;
@@ -30,6 +31,7 @@ public:
 	void PlayHitSound(const FVector& ImpactPoint);
 	void PlayHitParticle(const FVector& ImpactPoint);
 	void SetHealthBarPercent();
+	void SetHealthBarVisible(bool visible);
 
 
 
@@ -69,6 +71,19 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	double CombatRadius = 500.f;
+
+	/*
+	 * Navigation
+	 */
+	UPROPERTY()
+	AAIController* EnemyController;
+
+	// 현재 탐색 상대
+	UPROPERTY(EditInstanceOnly, Category="AI Navigation")
+	AActor* PatrolTarget;
+	
+	UPROPERTY(EditInstanceOnly, Category="AI Navigation")
+	TArray<AActor*> PatrolTargets;
 
 
 public:
