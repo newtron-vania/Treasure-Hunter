@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/HitInterface.h"
+#include "Pawns/Characters/CharacterTypes.h"
 #include "Enemy.generated.h"
 
 class UHealthBarComponent;
@@ -30,8 +31,16 @@ public:
 	void PlayHitParticle(const FVector& ImpactPoint);
 	void SetHealthBarPercent();
 
+
+
 protected:
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable)
+	void Die();
+	
+	UPROPERTY(BlueprintReadOnly)
+	EDeathPose DeathPose = EDeathPose::EDP_Alive;
 
 private:
 
@@ -47,7 +56,7 @@ private:
 	UAnimMontage* HitReactMontage;
 
 	UPROPERTY(EditDefaultsOnly, Category= Montages)
-	UAnimMontage* DeathMontage;
+	TArray<UAnimMontage*> DeathMontages;
 
 	UPROPERTY(EditDefaultsOnly, Category= Sounds)
 	USoundBase* HitSound;
@@ -55,10 +64,12 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = VisualEffects)
 	UParticleSystem* HitParticles;
 
+
+
 public:
 	void PlayHitReactMontage(const FName SectionName) const;
-	void PlayDeathMontage() const;
-	void Die();
+	void PlayDeathMontage();
+
 
 };
 

@@ -4,8 +4,6 @@
 #include "Enemies/Enemy.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Slash/DebugMacros.h"
-#include "Kismet/KismetSystemLibrary.h"
 #include "Components/AttributeComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "HUD/HealthBarComponent.h"
@@ -24,6 +22,7 @@ AEnemy::AEnemy()
 	Attributes = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
 	HealthBarWidget = CreateDefaultSubobject<UHealthBarComponent>(TEXT("HealthBar"));
 	HealthBarWidget->SetupAttachment(GetRootComponent());
+	
 }
 
 void AEnemy::BeginPlay()
@@ -45,17 +44,16 @@ void AEnemy::PlayHitReactMontage(const FName SectionName) const
 }
 
 
-void AEnemy::PlayDeathMontage() const
+void AEnemy::PlayDeathMontage()
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
-	if(AnimInstance && DeathMontage)
+	if(AnimInstance && DeathMontages.Num() > 0)
 	{
-		int32 SectionCount = DeathMontage->GetNumSections();
-		FName SectionName = DeathMontage->GetSectionName(FMath::RandRange(0, SectionCount-1));
+		UAnimMontage* Montage = DeathMontages[FMath::RandRange(0, DeathMontages.Num()-1)];
+		AnimInstance->Montage_Play(Montage);
 		
-		AnimInstance->Montage_Play(DeathMontage);
-		AnimInstance->Montage_JumpToSection(SectionName);
+		DeathPose = EDeathPose::EDP_Dead;
 	}
 }
 
