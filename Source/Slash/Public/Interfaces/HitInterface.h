@@ -1,12 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
 #include "HitInterface.generated.h"
 
-// This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UHitInterface : public UInterface
 {
@@ -20,8 +17,11 @@ class SLASH_API IHitInterface
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	/*
+	 * BlueprintNativeEvent : 해당 인터페이스를 작성한 C++ 구현 함수를 Blueprint Graph에서 호출 가능
+	 * 상속받은 클래스들은 구현할 때 함수명_Implementation으로 함수명을 작성
+	 */
 	UFUNCTION(BlueprintNativeEvent)
 	void GetHit(const FVector& ImpactPoint);
 };

@@ -30,8 +30,11 @@ void AEnemy::BeginPlay()
 	Super::BeginPlay();
 
 	SetHealthBarPercent();
+
+	HealthBarWidget->SetVisibility(false);
 }
 
+//hitReact Montage 실행
 void AEnemy::PlayHitReactMontage(const FName SectionName) const
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
@@ -43,7 +46,7 @@ void AEnemy::PlayHitReactMontage(const FName SectionName) const
 	}
 }
 
-
+//Death Montage 실행
 void AEnemy::PlayDeathMontage()
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
@@ -57,14 +60,29 @@ void AEnemy::PlayDeathMontage()
 	}
 }
 
+//Enemy Death 실행
 void AEnemy::Die()
 {
 	PlayDeathMontage();
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	HealthBarWidget->SetVisibility(false);
 }
 
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if(CombatTarget)
+	{
+		const double DistanceToTarget = (CombatTarget->GetActorLocation() - GetActorLocation()).Size();
+		if(DistanceToTarget > CombatRadius)
+		{
+			HealthBarWidget->SetVisibility(false);
+			CombatTarget = nullptr;
+		}
+	}
 
 }
 
@@ -116,6 +134,13 @@ void AEnemy::DirectionalHitReact(const FVector& ImpactPoint)
 	*/
 }
 
+/*
+ * 언리얼 엔진 피격 이벤트 자동 실행
+ * DamageAmount : 데미지량
+ * DamageEvent : 데미지 실행 이벤트
+ * EventInstigator : 공격 실행자(플레이어)
+ * DamageCauser : 충돌 이벤트 대상자(무기)
+ */
 float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
 	AActor* DamageCauser)
 {
@@ -124,11 +149,20 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 		Attributes->ReceiveDamage(DamageAmount);
 	}
 	SetHealthBarPercent();
+
+	CombatTarget = EventInstigator->GetPawn();
 	return DamageAmount;
 }
 
+/*
+ * GetHit 인터페이스 구현
+ */
 void AEnemy::GetHit_Implementation(const FVector& ImpactPoint)
 {
+	if(HealthBarWidget)
+	{
+		HealthBarWidget->SetVisibility(true);
+	}
 	if(Attributes && Attributes->isAlive())
 	{
 		DirectionalHitReact(ImpactPoint);
