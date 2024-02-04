@@ -40,9 +40,13 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void Die();
-
 	bool InTargetRange(AActor* Target, double Radius);
-	
+	void MoveToTarget(AActor* Target);
+
+	AActor* ChoosePatrolTarget();
+	void CheckCombatTarget();
+	void CheckPatrolTarget();
+
 	UPROPERTY(BlueprintReadOnly)
 	EDeathPose DeathPose = EDeathPose::EDP_Alive;
 
@@ -88,7 +92,16 @@ private:
 	TArray<AActor*> PatrolTargets;
 
 	UPROPERTY(EditDefaultsOnly)
-	double PatrolRadius = 20.f;
+	double PatrolRadius = 200.f;
+
+	FTimerHandle PatrolTimer;
+	void PatrolTimerFinished();
+
+	UPROPERTY(EditAnywhere, Category="AI Navigation")
+	float WaitMin = 5.f;
+	
+	UPROPERTY(EditAnywhere, Category="AI Navigation")
+	float WaitMax = 10.f;
 
 
 public:
@@ -97,4 +110,3 @@ public:
 
 
 };
-

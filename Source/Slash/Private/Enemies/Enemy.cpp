@@ -10,6 +10,7 @@
 #include "HUD/HealthBarComponent.h"
 #include "AIController.h"
 #include "NavigationPath.h"
+#include "AI/Navigation/NavigationTypes.h"
 #include "Slash/DebugMacros.h"
 
 
@@ -31,15 +32,6 @@ AEnemy::AEnemy()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-}
-
-void AEnemy::BeginPlay()
-{
-	Super::BeginPlay();
-
-	SetHealthBarPercent();
-
-	SetHealthBarVisible(false);
 }
 
 //hitReact Montage 실행
@@ -66,6 +58,22 @@ void AEnemy::PlayDeathMontage()
 	}
 }
 
+void AEnemy::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SetHealthBarPercent();
+	SetHealthBarVisible(false);
+
+	EnemyController = Cast<AAIController>(GetController());
+	MoveToTarget(PatrolTarget);
+}
+
+void AEnemy::PatrolTimerFinished()
+{
+	MoveToTarget(PatrolTarget);
+}
+
 //Enemy Death 실행
 void AEnemy::Die()
 {
@@ -77,58 +85,78 @@ void AEnemy::Die()
 	SetHealthBarVisible(false);
 }
 
+// 거리 내 타겟 유무
 bool AEnemy::InTargetRange(AActor* Target, double Radius)
 {
+	if(Target == nullptr) return false;
 	const double DistanceToTarget = (Target->GetActorLocation() - GetActorLocation()).Size();
 	DRAW_SPHERE_SingleFrame(GetActorLocation());
 	DRAW_SPHERE_SingleFrame(Target->GetActorLocation());
 	return DistanceToTarget <= Radius;
 }
 
+// 타겟으로 이동
+void AEnemy::MoveToTarget(AActor* Target)
+{
+	if(EnemyController == nullptr || Target == nullptr) return;
+
+	FAIMoveRequest MoveRequest;
+	MoveRequest.SetGoalActor(Target);
+	MoveRequest.SetAcceptanceRadius(15.f);
+	EnemyController->MoveTo(MoveRequest);
+	
+
+	
+}
+
+// 수색 위치를 선택
+AActor* AEnemy::ChoosePatrolTarget()
+{
+	TArray<AActor*> ValidTargets;
+	for(auto Target : PatrolTargets)
+	{
+		if(Target != PatrolTarget)
+		{
+			ValidTargets.AddUnique(Target);
+		}
+	}
+			
+	const int32 NumPatrolTargets = ValidTargets.Num();
+	if(NumPatrolTargets > 0)
+	{
+		const int32 TargetSelection = FMath::RandRange(0, NumPatrolTargets-1);
+		return ValidTargets[TargetSelection];
+	}
+	return nullptr;
+}
+
+
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(CombatTarget)
-	{
-		if(!InTargetRange(CombatTarget, CombatRadius))
-		{
-			SetHealthBarVisible(false);
-			CombatTarget = nullptr;
-		}
-	}
-	if(PatrolTarget && EnemyController)
-	{
-		if(InTargetRange(PatrolTarget, PatrolRadius))
-		{
-			TArray<AActor*> ValidTargets;
-			for(auto Target : PatrolTargets)
-			{
-				if(Target != PatrolTarget)
-				{
-					ValidTargets.Add(Target);
-				}
-			}
-			
-			const int32 NumPatrolTargets = PatrolTargets.Num();
-			if(PatrolTargets.Num() > 0)
-			{
-				const int32 TargetSelection = FMath::RandRange(0, NumPatrolTargets-1);
-				AActor* Target = PatrolTargets[TargetSelection];
-				PatrolTarget = Target;
-
-				FAIMoveRequest MoveRequest;
-				MoveRequest.SetGoalActor(PatrolTarget);
-				MoveRequest.SetAcceptanceRadius(15.f);
-				FNavPathSharedPtr NavPath;
-				EnemyController->MoveTo(MoveRequest, &NavPath);
-			}
-			
-		}
-	}
-
+	CheckCombatTarget();
+	CheckPatrolTarget();
 }
 
+void AEnemy::CheckCombatTarget()
+{
+	if(!InTargetRange(CombatTarget, CombatRadius))
+	{
+		SetHealthBarVisible(false);
+		CombatTarget = nullptr;
+	}
+}
+
+void AEnemy::CheckPatrolTarget()
+{
+	if(InTargetRange(PatrolTarget, PatrolRadius))
+	{
+		PatrolTarget = ChoosePatrolTarget();
+		const float WaitTime = FMath::RandRange(WaitMin,WaitMax);
+		GetWorldTimerManager().SetTimer(PatrolTimer, this, &AEnemy::PatrolTimerFinished, WaitTime);
+	}
+}
 void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
