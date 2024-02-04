@@ -10,6 +10,7 @@
 #include "HUD/HealthBarComponent.h"
 #include "AIController.h"
 #include "NavigationPath.h"
+#include "Slash/DebugMacros.h"
 
 
 AEnemy::AEnemy()
@@ -39,22 +40,6 @@ void AEnemy::BeginPlay()
 	SetHealthBarPercent();
 
 	SetHealthBarVisible(false);
-
-	EnemyController = Cast<AAIController>(GetController());
-	if(EnemyController && PatrolTarget)
-	{
-		FAIMoveRequest MoveRequest;
-		MoveRequest.SetGoalActor(PatrolTarget);
-		MoveRequest.SetAcceptanceRadius(15.f);
-		FNavPathSharedPtr NavPath;
-		EnemyController->MoveTo(MoveRequest, &NavPath);
-		TArray<FNavPathPoint>& PathPoints = NavPath->GetPathPoints();
-		for(auto& point : PathPoints)
-		{
-			const FVector& Location = point.Location;
-			DrawDebugSphere(GetWorld(), Location, 25.f, 12, FColor::Green, false, 10.f);
-		}
-	}
 }
 
 //hitReact Montage 실행
@@ -92,17 +77,53 @@ void AEnemy::Die()
 	SetHealthBarVisible(false);
 }
 
+bool AEnemy::InTargetRange(AActor* Target, double Radius)
+{
+	const double DistanceToTarget = (Target->GetActorLocation() - GetActorLocation()).Size();
+	DRAW_SPHERE_SingleFrame(GetActorLocation());
+	DRAW_SPHERE_SingleFrame(Target->GetActorLocation());
+	return DistanceToTarget <= Radius;
+}
+
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	if(CombatTarget)
 	{
-		const double DistanceToTarget = (CombatTarget->GetActorLocation() - GetActorLocation()).Size();
-		if(DistanceToTarget > CombatRadius)
+		if(!InTargetRange(CombatTarget, CombatRadius))
 		{
-			HealthBarWidget->SetVisibility(false);
+			SetHealthBarVisible(false);
 			CombatTarget = nullptr;
+		}
+	}
+	if(PatrolTarget && EnemyController)
+	{
+		if(InTargetRange(PatrolTarget, PatrolRadius))
+		{
+			TArray<AActor*> ValidTargets;
+			for(auto Target : PatrolTargets)
+			{
+				if(Target != PatrolTarget)
+				{
+					ValidTargets.Add(Target);
+				}
+			}
+			
+			const int32 NumPatrolTargets = PatrolTargets.Num();
+			if(PatrolTargets.Num() > 0)
+			{
+				const int32 TargetSelection = FMath::RandRange(0, NumPatrolTargets-1);
+				AActor* Target = PatrolTargets[TargetSelection];
+				PatrolTarget = Target;
+
+				FAIMoveRequest MoveRequest;
+				MoveRequest.SetGoalActor(PatrolTarget);
+				MoveRequest.SetAcceptanceRadius(15.f);
+				FNavPathSharedPtr NavPath;
+				EnemyController->MoveTo(MoveRequest, &NavPath);
+			}
+			
 		}
 	}
 
