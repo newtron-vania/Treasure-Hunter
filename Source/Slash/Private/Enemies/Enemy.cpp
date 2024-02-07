@@ -11,6 +11,7 @@
 #include "AIController.h"
 #include "AI/Navigation/NavigationTypes.h"
 #include "Kismet/GameplayStatics.h"
+#include "Pawns/Characters/SlashCharacter.h"
 
 #include "Slash/DebugMacros.h"
 
@@ -114,8 +115,6 @@ void AEnemy::MoveToTarget(AActor* Target)
 	MoveRequest.SetAcceptanceRadius(15.f);
 	EnemyController->MoveTo(MoveRequest);
 	
-
-	
 }
 
 // 수색 위치를 선택
@@ -141,7 +140,15 @@ AActor* AEnemy::ChoosePatrolTarget()
 
 void AEnemy::PawnSeen(APawn* SeenPawn)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Pawn Seen!"));
+	if(EnemyState == EEnemyState::EES_Chasing) return;
+	if(SeenPawn->ActorHasTag(FName("SlashCharacter")))
+	{
+		EnemyState = EEnemyState::EES_Chasing;
+		GetWorldTimerManager().ClearTimer(PatrolTimer);
+		GetCharacterMovement()->MaxWalkSpeed = 300.f;
+		CombatTarget = SeenPawn;
+		MoveToTarget(CombatTarget);
+	}
 }
 
 
@@ -149,8 +156,15 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	CheckCombatTarget();
-	CheckPatrolTarget();
+	if(EnemyState > EEnemyState::EES_Patrolling)
+	{
+		CheckCombatTarget();
+	}
+	if(EnemyState == EEnemyState::EES_Patrolling)
+	{
+		CheckPatrolTarget();
+	}
+		
 }
 
 void AEnemy::CheckCombatTarget()
