@@ -6,13 +6,13 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/AttributeComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Kismet/GameplayStatics.h"
+#include "Perception/PawnSensingComponent.h"
 #include "HUD/HealthBarComponent.h"
 #include "AIController.h"
-#include "NavigationPath.h"
 #include "AI/Navigation/NavigationTypes.h"
-#include "Slash/DebugMacros.h"
+#include "Kismet/GameplayStatics.h"
 
+#include "Slash/DebugMacros.h"
 
 AEnemy::AEnemy()
 {
@@ -32,6 +32,10 @@ AEnemy::AEnemy()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
+
+	PawnSensing = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensing"));
+	PawnSensing-> SightRadius = 4000.f;
+	PawnSensing-> SetPeripheralVisionAngle(45.f);
 }
 
 //hitReact Montage 실행
@@ -67,6 +71,11 @@ void AEnemy::BeginPlay()
 
 	EnemyController = Cast<AAIController>(GetController());
 	MoveToTarget(PatrolTarget);
+
+	if(PawnSensing)
+	{
+		PawnSensing->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
+	}
 }
 
 void AEnemy::PatrolTimerFinished()
@@ -128,6 +137,11 @@ AActor* AEnemy::ChoosePatrolTarget()
 		return ValidTargets[TargetSelection];
 	}
 	return nullptr;
+}
+
+void AEnemy::PawnSeen(APawn* SeenPawn)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Pawn Seen!"));
 }
 
 
