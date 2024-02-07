@@ -8,6 +8,7 @@
 #include "Pawns/Characters/CharacterTypes.h"
 #include "Enemy.generated.h"
 
+class UPawnSensingComponent;
 class AAIController;
 class UHealthBarComponent;
 class UAnimMontage;
@@ -42,8 +43,11 @@ protected:
 	void Die();
 	bool InTargetRange(AActor* Target, double Radius);
 	void MoveToTarget(AActor* Target);
-
 	AActor* ChoosePatrolTarget();
+
+	UFUNCTION()
+	void PawnSeen(APawn* SeenPawn);
+	
 	void CheckCombatTarget();
 	void CheckPatrolTarget();
 
@@ -51,12 +55,18 @@ protected:
 	EDeathPose DeathPose = EDeathPose::EDP_Alive;
 
 private:
-
+	/*
+	 * Components
+	 */
+	
 	UPROPERTY(VisibleAnywhere)
 	UAttributeComponent* Attributes;
 
 	UPROPERTY(VisibleAnywhere)
 	UHealthBarComponent* HealthBarWidget;
+
+	UPROPERTY(VisibleAnywhere)
+	UPawnSensingComponent* PawnSensing;
 	/*
 	* Play Montage Fuction
 	*/
