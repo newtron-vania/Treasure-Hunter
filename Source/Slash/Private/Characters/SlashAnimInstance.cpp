@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Pawns/Characters/SlashAnimInstance.h"
-#include "Pawns/Characters/SlashCharacter.h"
+#include "Characters/SlashAnimInstance.h"
+#include "Characters/SlashCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 

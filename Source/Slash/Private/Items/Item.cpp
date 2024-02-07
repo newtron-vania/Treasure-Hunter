@@ -5,7 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Math/UnitConversion.h"
 #include "NiagaraComponent.h"
-#include "Pawns/Characters/SlashCharacter.h"
+#include "Characters/SlashCharacter.h"
 
 AItem::AItem()
 {

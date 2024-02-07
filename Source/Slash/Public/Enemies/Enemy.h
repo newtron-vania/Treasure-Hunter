@@ -3,9 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-#include "Interfaces/HitInterface.h"
-#include "Pawns/Characters/CharacterTypes.h"
+#include "Characters/CharacterTypes.h"
+#include "Characters/BaseCharacter.h"
 #include "Enemy.generated.h"
 
 class UPawnSensingComponent;
@@ -16,7 +15,7 @@ class USoundBase;
 class UAttributeComponent;
 
 UCLASS()
-class SLASH_API AEnemy : public ACharacter, public IHitInterface
+class SLASH_API AEnemy : public ABaseCharacter
 {
 	GENERATED_BODY()
 
@@ -25,7 +24,6 @@ public:
 	
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	void DirectionalHitReact(const FVector& ImpactPoint);
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;;
 
 	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
@@ -40,7 +38,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
-	void Die();
+	virtual void Die() override;
 	bool InTargetRange(AActor* Target, double Radius);
 	void MoveToTarget(AActor* Target);
 	AActor* ChoosePatrolTarget();
@@ -55,32 +53,11 @@ protected:
 	EDeathPose DeathPose = EDeathPose::EDP_Alive;
 
 private:
-	/*
-	 * Components
-	 */
-	
-	UPROPERTY(VisibleAnywhere)
-	UAttributeComponent* Attributes;
-
 	UPROPERTY(VisibleAnywhere)
 	UHealthBarComponent* HealthBarWidget;
 
 	UPROPERTY(VisibleAnywhere)
 	UPawnSensingComponent* PawnSensing;
-	/*
-	* Play Montage Fuction
-	*/
-	UPROPERTY(EditDefaultsOnly, Category= Montages)
-	UAnimMontage* HitReactMontage;
-
-	UPROPERTY(EditDefaultsOnly, Category= Montages)
-	TArray<UAnimMontage*> DeathMontages;
-
-	UPROPERTY(EditDefaultsOnly, Category= Sounds)
-	USoundBase* HitSound;
-	
-	UPROPERTY(EditDefaultsOnly, Category = VisualEffects)
-	UParticleSystem* HitParticles;
 
 	UPROPERTY()
 	AActor* CombatTarget;
@@ -119,7 +96,6 @@ private:
 	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
 
 public:
-	void PlayHitReactMontage(const FName SectionName) const;
 	void PlayDeathMontage();
 
 
