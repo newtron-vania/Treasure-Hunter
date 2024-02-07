@@ -4,7 +4,7 @@
 #include "Items/Weapon.h"
 
 #include "Components/SphereComponent.h"
-#include "Pawns/Characters/SlashCharacter.h"
+#include "Characters/SlashCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetSystemLibrary.h"

@@ -3,7 +3,7 @@
 
 #include "Items/Treasure.h"
 
-#include "Pawns/Characters/SlashCharacter.h"
+#include "Characters/SlashCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 
