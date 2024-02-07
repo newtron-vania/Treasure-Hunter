@@ -88,6 +88,9 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	double CombatRadius = 500.f;
 
+	UPROPERTY(EditDefaultsOnly)
+	double AttackRadius = 150.f;
+
 	/*
 	 * Navigation
 	 */
