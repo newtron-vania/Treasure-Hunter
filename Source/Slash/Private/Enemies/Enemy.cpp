@@ -100,8 +100,6 @@ bool AEnemy::InTargetRange(AActor* Target, double Radius)
 {
 	if(Target == nullptr) return false;
 	const double DistanceToTarget = (Target->GetActorLocation() - GetActorLocation()).Size();
-	DRAW_SPHERE_SingleFrame(GetActorLocation());
-	DRAW_SPHERE_SingleFrame(Target->GetActorLocation());
 	return DistanceToTarget <= Radius;
 }
 
@@ -138,6 +136,7 @@ AActor* AEnemy::ChoosePatrolTarget()
 	return nullptr;
 }
 
+//When Enemy sensing pawn(ex. SlashCharacter) event
 void AEnemy::PawnSeen(APawn* SeenPawn)
 {
 	if(EnemyState == EEnemyState::EES_Chasing) return;
@@ -272,6 +271,10 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 	SetHealthBarPercent();
 
 	CombatTarget = EventInstigator->GetPawn();
+	EnemyState = EEnemyState::EES_Chasing;
+	GetCharacterMovement()->MaxWalkSpeed = 300.f;
+	MoveToTarget(CombatTarget);
+	
 	return DamageAmount;
 }
 
