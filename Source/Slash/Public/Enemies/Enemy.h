@@ -23,16 +23,9 @@ public:
 	AEnemy();
 	
 	virtual void Tick(float DeltaTime) override;
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;;
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
-	void PlayHitSound(const FVector& ImpactPoint);
-	void PlayHitParticle(const FVector& ImpactPoint);
-	void SetHealthBarPercent();
-	void SetHealthBarVisible(bool visible);
-
-
 
 protected:
 	virtual void BeginPlay() override;
@@ -44,16 +37,26 @@ protected:
 	AActor* ChoosePatrolTarget();
 	virtual void Attack() override;
 	virtual void PlayAttackMontage() override;
+	virtual bool CanAttack() override;
+
+	virtual void PlayHitSound(const FVector& ImpactPoint) override;
+	virtual void SpawnHitParticle(const FVector& ImpactPoint) override;
+	virtual void HandleDamage(float DamageAmount) override;
 	
+	bool IsAlive();
 
 	UFUNCTION()
 	void PawnSeen(APawn* SeenPawn);
-	
+
 	void CheckCombatTarget();
 	void CheckPatrolTarget();
 
 	UPROPERTY(BlueprintReadOnly)
-	EDeathPose DeathPose = EDeathPose::EDP_Alive;
+	EDeathOrAlive EnemyAlive = EDeathOrAlive::EDA_Alive;
+	
+	UPROPERTY(BlueprintReadOnly)
+	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
+
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -89,6 +92,7 @@ private:
 
 	FTimerHandle PatrolTimer;
 	void PatrolTimerFinished();
+	void ClearPatrolTimer();
 
 	UPROPERTY(EditAnywhere, Category="AI Navigation")
 	float WaitMin = 5.f;
@@ -96,8 +100,38 @@ private:
 	UPROPERTY(EditAnywhere, Category="AI Navigation")
 	float WaitMax = 10.f;
 
-	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
+	/*
+	 * AI behavior
+	 */
+	void UpdateHealthBarPercent();
+	void SetHealthBarVisible(bool visible);
+	void LooseInterest();
+	void StartPatrolling();
+	void ChaseTarget();
+	bool IsOutsidedCombatRadius();
+	bool IsOutsideAttackRadius();
+	bool IsInsideAttackRadius();
+	bool IsChasing();
+	bool IsAttacking();
+	bool IsDead();
+	bool IsEngaged();
+	/** Combat **/
+	void StartAttackTimer();
+	void ClearAttackTimer();
 
+	FTimerHandle AttackTimer;
+
+	UPROPERTY(EditAnywhere, Category=Combat)
+	float AttackMin = 0.5f;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	float AttackMax = 1.f;
+
+	UPROPERTY(EditAnywhere, Category=Combat)
+	float PatrollingSpeed = 150.f;
+	
+	UPROPERTY(EditAnywhere, Category=Combat)
+	float ChasingSpeed = 300.f;
 public:
 	void PlayDeathMontage();
 

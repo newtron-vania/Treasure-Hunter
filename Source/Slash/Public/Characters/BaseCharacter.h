@@ -26,13 +26,12 @@ protected:
 	virtual void Attack();
 	virtual void Die();
 
-	/**
-	* Play montage functions
-	*/
-
 	virtual void PlayAttackMontage();
 	void PlayHitReactMontage(const FName& SectionName);
 	void DirectionalHitReact(const FVector& ImpactPoint);
+	virtual void PlayHitSound(const FVector& ImpactPoint);
+	virtual void SpawnHitParticle(const FVector& ImpactPoint);
+	virtual void HandleDamage(float DamageAmount);
 
 	virtual bool CanAttack();
 
@@ -60,7 +59,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UAttributeComponent* Attributes;
-
+	
 	UPROPERTY(EditAnywhere, Category = Sounds)
 	USoundBase* HitSound;
 
