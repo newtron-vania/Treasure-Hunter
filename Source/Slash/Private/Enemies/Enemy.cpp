@@ -96,6 +96,7 @@ void AEnemy::BeginPlay()
 		PawnSensing->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
 	}
 	InitializeEnemy();
+	Tags.Add(FName("Enemey"));
 }
 
 //Enemy Death 실행
@@ -328,7 +329,7 @@ void AEnemy::PawnSeen(APawn* SeenPawn)
 		!IsDead() &&
 			!IsChasing()&&
 				EnemyState < EEnemyState::EES_Attacking &&
-					SeenPawn->ActorHasTag(FName("SlashCharacter"));
+					SeenPawn->ActorHasTag(FName("EngageableTarget"));
 	if(bShouldChaseTarget)
 	{
 		CombatTarget = SeenPawn;
