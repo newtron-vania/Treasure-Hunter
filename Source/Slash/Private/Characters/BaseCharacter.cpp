@@ -76,6 +76,14 @@ void ABaseCharacter::DirectionalHitReact(const FVector& ImpactPoint)
 
 void ABaseCharacter::PlayAttackMontage()
 {
+	UAnimInstance* AnimeInstance = GetMesh()->GetAnimInstance();
+	if(AnimeInstance && AttackMontage)
+	{
+		AnimeInstance->Montage_Play(AttackMontage);
+		int32 Section = FMath::RandRange(0, AttackMontage->GetNumSections()-1);
+		FName SectionName = AttackMontage->GetSectionName(Section);
+		AnimeInstance->Montage_JumpToSection(SectionName);
+	}
 }
 
 bool ABaseCharacter::CanAttack()
