@@ -44,8 +44,6 @@ protected:
 	/*
 	 * Play Montage Function
 	 */
-
-	virtual void PlayAttackMontage() override;
 	virtual void AttackEnd() override;
 	virtual bool CanAttack() override;
 

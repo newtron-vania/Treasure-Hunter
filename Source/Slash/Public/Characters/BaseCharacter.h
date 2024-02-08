@@ -26,12 +26,22 @@ protected:
 	virtual void Attack();
 	virtual void Die();
 
-	virtual void PlayAttackMontage();
+	/*
+	 * Montage Function
+	 */
+		
+	void PlayMontageSection(UAnimMontage* Montage, FName SectionName);
+	int32 PlayRandomMontageSection(UAnimMontage* Montage);
+
+	int32 PlayAttackMontage();
 	void PlayHitReactMontage(const FName& SectionName);
 	void DirectionalHitReact(const FVector& ImpactPoint);
 	virtual void PlayHitSound(const FVector& ImpactPoint);
 	virtual void SpawnHitParticle(const FVector& ImpactPoint);
 	virtual void HandleDamage(float DamageAmount);
+
+	virtual void PlayDeathMontage();
+
 
 	virtual bool CanAttack();
 
@@ -53,6 +63,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	TArray<UAnimMontage*> DeathMontages;
 
+	/*
+	* Component Functiona
+	*/
+	
+	virtual void DisableCapsule();
+
+	
 	/*
 	* Components
 	*/

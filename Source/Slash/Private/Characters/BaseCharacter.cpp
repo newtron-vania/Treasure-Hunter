@@ -1,5 +1,6 @@
 #include "Characters/BaseCharacter.h"
 #include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Items/Weapon.h"
 #include "Components/AttributeComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -23,6 +24,24 @@ void ABaseCharacter::Attack()
 
 void ABaseCharacter::Die()
 {
+}
+
+void ABaseCharacter::PlayMontageSection(UAnimMontage* Montage, FName SectionName)
+{
+	UAnimInstance* AnimeInstance = GetMesh()->GetAnimInstance();
+	if(AnimeInstance && Montage)
+	{
+		AnimeInstance->Montage_Play(Montage);
+		AnimeInstance->Montage_JumpToSection(SectionName);
+	}
+}
+
+int32 ABaseCharacter::PlayRandomMontageSection(UAnimMontage* Montage)
+{
+	int32 selection = FMath::RandRange(0, Montage->GetNumSections()-1);
+	FName SectionName = Montage->GetSectionName(selection);
+	PlayMontageSection(Montage, SectionName);
+	return selection;
 }
 
 void ABaseCharacter::PlayHitReactMontage(const FName& SectionName)
@@ -107,16 +126,22 @@ void ABaseCharacter::HandleDamage(float DamageAmount)
 	}
 }
 
-void ABaseCharacter::PlayAttackMontage()
+//Play Death Montage
+void ABaseCharacter::PlayDeathMontage()
 {
-	UAnimInstance* AnimeInstance = GetMesh()->GetAnimInstance();
-	if(AnimeInstance && AttackMontage)
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	if(AnimInstance && DeathMontages.Num() > 0)
 	{
-		AnimeInstance->Montage_Play(AttackMontage);
-		int32 Section = FMath::RandRange(0, AttackMontage->GetNumSections()-1);
-		FName SectionName = AttackMontage->GetSectionName(Section);
-		AnimeInstance->Montage_JumpToSection(SectionName);
+		UAnimMontage* Montage = DeathMontages[FMath::RandRange(0, DeathMontages.Num()-1)];
+		AnimInstance->Montage_Play(Montage);
 	}
+}
+
+
+int32 ABaseCharacter::PlayAttackMontage()
+{
+	return PlayRandomMontageSection(AttackMontage);
 }
 
 bool ABaseCharacter::CanAttack()
@@ -126,6 +151,11 @@ bool ABaseCharacter::CanAttack()
 
 void ABaseCharacter::AttackEnd()
 {
+}
+
+void ABaseCharacter::DisableCapsule()
+{
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void ABaseCharacter::Tick(float DeltaTime)
