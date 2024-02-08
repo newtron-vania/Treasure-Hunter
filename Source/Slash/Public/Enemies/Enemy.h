@@ -37,6 +37,7 @@ protected:
 	AActor* ChoosePatrolTarget();
 	virtual void Attack() override;
 	virtual bool CanAttack() override;
+	virtual void AttackEnd() override;
 
 	virtual void PlayHitSound(const FVector& ImpactPoint) override;
 	virtual void SpawnHitParticle(const FVector& ImpactPoint) override;
@@ -68,7 +69,7 @@ private:
 	AActor* CombatTarget;
 
 	UPROPERTY(EditDefaultsOnly)
-	double CombatRadius = 500.f;
+	double CombatRadius = 1000.f;
 
 	UPROPERTY(EditDefaultsOnly)
 	double AttackRadius = 150.f;
@@ -112,8 +113,8 @@ private:
 	bool IsInsideAttackRadius();
 	bool IsChasing();
 	bool IsAttacking();
-	bool IsDead();
 	bool IsEngaged();
+	bool IsDead();
 	/** Combat **/
 	void StartAttackTimer();
 	void ClearAttackTimer();
