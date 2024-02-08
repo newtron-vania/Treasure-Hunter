@@ -113,7 +113,14 @@ AActor* AEnemy::ChoosePatrolTarget()
 
 void AEnemy::Attack()
 {
+	EnemyState = EEnemyState::EES_Engaged;
 	Super::Attack();
+	PlayAttackMontage();
+}
+
+bool AEnemy::IsEngaged()
+{
+	return EnemyState == EEnemyState::EES_Engaged;
 }
 
 bool AEnemy::CanAttack()
@@ -121,8 +128,15 @@ bool AEnemy::CanAttack()
 	bool bCanAttack =
 		IsInsideAttackRadius() &&
 			!IsAttacking()&&
+				!IsEngaged()&&
 				!IsDead();
 	return bCanAttack;
+}
+
+void AEnemy::AttackEnd()
+{
+	EnemyState = EEnemyState::EES_NoState;
+	CheckCombatTarget();
 }
 
 void AEnemy::ClearPatrolTimer()
@@ -163,7 +177,7 @@ void AEnemy::Tick(float DeltaTime)
 
 	if(IsDead())
 	{
-		
+		return;
 	}
 	if(EnemyState > EEnemyState::EES_Patrolling)
 	{
@@ -228,11 +242,6 @@ void AEnemy::StartAttackTimer()
 void AEnemy::ClearAttackTimer()
 {
 	GetWorldTimerManager().ClearTimer(AttackTimer);
-}
-
-bool AEnemy::IsEngaged()
-{
-	return EnemyState == EEnemyState::EES_Engaged;
 }
 
 void AEnemy::CheckCombatTarget()
