@@ -19,20 +19,13 @@ class SLASH_API ASlashCharacter : public ABaseCharacter
 	GENERATED_BODY()
 
 public:
-	virtual void Tick(float DeltaTime) override;
+	ASlashCharacter();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	// Sets default values for this character's properties
-	ASlashCharacter();
-
-
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	/*
-	* Callbacks for Input
-	*/
+	/** Callbacks for Input */
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void Turn(float Value);
@@ -40,26 +33,25 @@ protected:
 	void Jump();
 	void EKeyPressed();
 	virtual void Attack() override;
-	
-	/*
-	 * Play Montage Function
-	 */
+
+	/** Combat */
+	void EquipWeapon(AWeapon* Weapon);
 	virtual void AttackEnd() override;
 	virtual bool CanAttack() override;
-
-	
-	void PlayEquipMontage(FName SectionName);
 	bool CanDisarm();
 	bool CanArm();
-
-	UFUNCTION(BlueprintCallable)
 	void Disarm();
-	UFUNCTION(BlueprintCallable)
 	void Arm();
+	void PlayEquipMontage(const FName& SectionName);
 
 	UFUNCTION(BlueprintCallable)
-	void EquippingEnd();
+	void AttachWeaponToBack();
 
+	UFUNCTION(BlueprintCallable)
+	void AttachWeaponToHand();
+
+	UFUNCTION(BlueprintCallable)
+	void FinishEquipping();
 
 private:	
 	UPROPERTY(VisibleAnywhere)
@@ -71,12 +63,14 @@ private:
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* OverlappingItem;
 	
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* EquipMontage;
+	
 	ECharacterState CharacterState = ECharacterState::ECS_UnEquipped;
+
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	EActionState ActionState = EActionState::EAS_Unoccupied;
 
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
-    UAnimMontage* EquipMontage;
-	
 
 public:
 	FORCEINLINE void SetOverlappingItem(AItem *Item) {OverlappingItem = Item; }
