@@ -97,7 +97,7 @@ void AEnemy::MoveToTarget(AActor* Target)
 
 	FAIMoveRequest MoveRequest;
 	MoveRequest.SetGoalActor(Target);
-	MoveRequest.SetAcceptanceRadius(15.f);
+	MoveRequest.SetAcceptanceRadius(50.f);
 	EnemyController->MoveTo(MoveRequest);
 	
 }
@@ -121,6 +121,17 @@ AActor* AEnemy::ChoosePatrolTarget()
 		return ValidTargets[TargetSelection];
 	}
 	return nullptr;
+}
+
+void AEnemy::Attack()
+{
+	Super::Attack();
+	PlayAttackMontage();
+}
+
+void AEnemy::PlayAttackMontage()
+{
+	Super::PlayAttackMontage();
 }
 
 //When Enemy sensing pawn(ex. SlashCharacter) event
@@ -181,6 +192,7 @@ void AEnemy::CheckCombatTarget()
 		//Inside attack range, attack character
 		EnemyState = EEnemyState::EES_Attacking;
 		//Play attack animation
+		Attack();
 	}
 }
 
