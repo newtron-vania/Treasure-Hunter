@@ -18,42 +18,51 @@ public:
 	ABaseCharacter();
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
-	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
 
 protected:
 	virtual void BeginPlay() override;
+	
 	virtual void Attack();
 	virtual void Die();
 
-	/*
-	 * Montage Function
-	 */
-		
-	void PlayMontageSection(UAnimMontage* Montage, FName SectionName);
-	int32 PlayRandomMontageSection(UAnimMontage* Montage);
 
-	int32 PlayAttackMontage();
-	void PlayHitReactMontage(const FName& SectionName);
 	void DirectionalHitReact(const FVector& ImpactPoint);
+	virtual void HandleDamage(float DamageAmount);
 	virtual void PlayHitSound(const FVector& ImpactPoint);
 	virtual void SpawnHitParticle(const FVector& ImpactPoint);
-	virtual void HandleDamage(float DamageAmount);
-
-	virtual void PlayDeathMontage();
-
-
+	virtual void DisableCapsule();
 	virtual bool CanAttack();
+	bool IsAlive();
+	
+	/*
+	* Montage Function
+	*/
+	void PlayHitReactMontage(const FName& SectionName);
+	int32 PlayAttackMontage();
+	virtual int32 PlayDeathMontage();
 
 	UFUNCTION(BlueprintCallable)
 	virtual void AttackEnd();
+	
+	UFUNCTION(BlueprintCallable)
+	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
 
 	UPROPERTY(VisibleAnywhere, Category = Weapon)
 	AWeapon* EquippedWeapon;
 
-	/**
-	* Animation montages
-	*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UAttributeComponent* Attributes;
+
+private:
+	void PlayMontageSection(UAnimMontage* Montage, FName SectionName);
+	int32 PlayRandomMontageSection(UAnimMontage* Montage);
+
+	UPROPERTY(EditAnywhere, Category = Sounds)
+	USoundBase* HitSound;
+
+	UPROPERTY(EditAnywhere, Category = VisualEffects)
+	UParticleSystem* HitParticles;
+
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* AttackMontage;
 
@@ -62,24 +71,4 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	TArray<UAnimMontage*> DeathMontages;
-
-	/*
-	* Component Functiona
-	*/
-	
-	virtual void DisableCapsule();
-
-	
-	/*
-	* Components
-	*/
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	UAttributeComponent* Attributes;
-	
-	UPROPERTY(EditAnywhere, Category = Sounds)
-	USoundBase* HitSound;
-
-	UPROPERTY(EditAnywhere, Category = VisualEffects)
-	UParticleSystem* HitParticles;
 };

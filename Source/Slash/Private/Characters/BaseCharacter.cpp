@@ -10,6 +10,7 @@ ABaseCharacter::ABaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Attributes = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 }
 
 void ABaseCharacter::BeginPlay()
@@ -127,15 +128,17 @@ void ABaseCharacter::HandleDamage(float DamageAmount)
 }
 
 //Play Death Montage
-void ABaseCharacter::PlayDeathMontage()
+int32 ABaseCharacter::PlayDeathMontage()
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-
+	int32 Selection = 0;
 	if(AnimInstance && DeathMontages.Num() > 0)
 	{
-		UAnimMontage* Montage = DeathMontages[FMath::RandRange(0, DeathMontages.Num()-1)];
+		Selection = FMath::RandRange(0, DeathMontages.Num()-1);
+		UAnimMontage* Montage = DeathMontages[FMath::RandRange(0, Selection)];
 		AnimInstance->Montage_Play(Montage);
 	}
+	return Selection;
 }
 
 
@@ -153,10 +156,16 @@ void ABaseCharacter::AttackEnd()
 {
 }
 
+bool ABaseCharacter::IsAlive()
+{
+	return Attributes && Attributes->isAlive();
+}
+
 void ABaseCharacter::DisableCapsule()
 {
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
+
 
 void ABaseCharacter::Tick(float DeltaTime)
 {
