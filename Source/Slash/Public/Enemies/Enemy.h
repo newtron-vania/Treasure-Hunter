@@ -36,7 +36,6 @@ protected:
 	void MoveToTarget(AActor* Target);
 	AActor* ChoosePatrolTarget();
 	virtual void Attack() override;
-	virtual void PlayAttackMontage() override;
 	virtual bool CanAttack() override;
 
 	virtual void PlayHitSound(const FVector& ImpactPoint) override;
@@ -132,8 +131,9 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category=Combat)
 	float ChasingSpeed = 300.f;
-public:
-	void PlayDeathMontage();
+
+	UPROPERTY(EditAnywhere, Category=Combat)
+	float DeathLifeSpan = 3.f;
 
 
 };

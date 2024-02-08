@@ -37,18 +37,6 @@ AEnemy::AEnemy()
 	PawnSensing-> SetPeripheralVisionAngle(45.f);
 }
 
-//Death Montage 실행
-void AEnemy::PlayDeathMontage()
-{
-	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-
-	if(AnimInstance && DeathMontages.Num() > 0)
-	{
-		UAnimMontage* Montage = DeathMontages[FMath::RandRange(0, DeathMontages.Num()-1)];
-		AnimInstance->Montage_Play(Montage);
-	}
-}
-
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
@@ -69,16 +57,17 @@ void AEnemy::PatrolTimerFinished()
 {
 	MoveToTarget(PatrolTarget);
 }
-
 //Enemy Death 실행
 void AEnemy::Die()
 {
 	EnemyAlive = EDeathOrAlive::EDA_Dead;
-	PlayDeathMontage();
 	
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
+	PlayDeathMontage();
+	ClearAttackTimer();
 	SetHealthBarVisible(false);
+	DisableCapsule();
+	SetLifeSpan(DeathLifeSpan);
+	GetCharacterMovement()->bOrientRotationToMovement = false;
 }
 
 // 거리 내 타겟 유무
@@ -125,12 +114,6 @@ AActor* AEnemy::ChoosePatrolTarget()
 void AEnemy::Attack()
 {
 	Super::Attack();
-	PlayAttackMontage();
-}
-
-void AEnemy::PlayAttackMontage()
-{
-	Super::PlayAttackMontage();
 }
 
 bool AEnemy::CanAttack()

@@ -102,11 +102,6 @@ void ASlashCharacter::Attack()
 	}
 }
 
-void ASlashCharacter::PlayAttackMontage()
-{
-	Super::PlayAttackMontage();
-}
-
 void ASlashCharacter::PlayEquipMontage(FName SectionName)
 {
 	UAnimInstance* AnimeInstance = GetMesh()->GetAnimInstance();
