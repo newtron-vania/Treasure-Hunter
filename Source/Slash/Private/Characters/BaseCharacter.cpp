@@ -19,11 +19,11 @@ void ABaseCharacter::BeginPlay()
 
 }
 
-void ABaseCharacter::GetHit_Implementation(const FVector& ImpactPoint)
+void ABaseCharacter::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)
 {
-	if(IsAlive())
+	if(IsAlive() && Hitter)
 	{
-		DirectionalHitReact(ImpactPoint);
+		DirectionalHitReact(Hitter->GetActorLocation());
 	}
 	else
 	{
@@ -69,6 +69,7 @@ void ABaseCharacter::PlayHitReactMontage(const FName& SectionName)
 	}
 }
 
+/** 피격 위치에 따른 애니메이션 실행 */
 void ABaseCharacter::DirectionalHitReact(const FVector& ImpactPoint)
 {
 	const FVector Forward = GetActorForwardVector();

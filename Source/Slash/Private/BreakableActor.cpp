@@ -24,7 +24,7 @@ ABreakableActor::ABreakableActor()
 	Capsule->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
 }
 
-void ABreakableActor::GetHit_Implementation(const FVector& ImpactPoint)
+void ABreakableActor::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)
 {
 	PlayBreakSound();
 	if(bBroken) return;

@@ -23,5 +23,5 @@ public:
 	 * 상속받은 클래스들은 구현할 때 함수명_Implementation으로 함수명을 작성
 	 */
 	UFUNCTION(BlueprintNativeEvent)
-	void GetHit(const FVector& ImpactPoint);
+	void GetHit(const FVector& ImpactPoint, AActor* Hitter);
 };
