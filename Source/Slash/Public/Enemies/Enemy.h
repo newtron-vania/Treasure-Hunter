@@ -24,14 +24,15 @@ public:
 
 	/** <AActor> **/
 	virtual void Tick(float DeltaTime) override;
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual void Destroyed() override;
 	/** </AActor> **/
 
 	/** <IHitInterface> **/
 	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
 	/** </IHitInterface> **/
 	
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-protected:
+	protected:
 	/** <AActor> **/
 	virtual void BeginPlay() override;
 	/** </AActor> **/
@@ -73,6 +74,7 @@ private:
 	bool InTargetRange(AActor* Target, double Radius);
 	void MoveToTarget(AActor* Target);
 	AActor* ChoosePatrolTarget();
+	void SpawnDefaultWeapon();
 
 	UFUNCTION()
 	void PawnSeen(APawn* SeenPawn);
@@ -82,6 +84,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UPawnSensingComponent* PawnSensing;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AWeapon> WeaponClass;
 	
 	UPROPERTY()
 	AActor* CombatTarget;
@@ -133,4 +138,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category=Combat)
 	float DeathLifeSpan = 3.f;
+
+	
 };
