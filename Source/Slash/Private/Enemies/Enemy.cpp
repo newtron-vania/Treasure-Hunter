@@ -57,18 +57,8 @@ void AEnemy::Tick(float DeltaTime)
  */
 void AEnemy::GetHit_Implementation(const FVector& ImpactPoint)
 {
+	Super::GetHit_Implementation(ImpactPoint);
 	SetHealthBarVisible(true);
-	if(IsAlive())
-	{
-		DirectionalHitReact(ImpactPoint);
-	}
-	else
-	{
-		Die();
-	}
-	
-	PlayHitSound(ImpactPoint);
-	SpawnHitParticle(ImpactPoint);
 }
 
 /*
