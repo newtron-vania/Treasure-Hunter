@@ -63,10 +63,19 @@ void ASlashCharacter::GetHit_Implementation(const FVector& ImpactPoint, AActor* 
 	ActionState = EActionState::EAS_HitReaction;
 }
 
+void ASlashCharacter::SetHUDHealth()
+{
+	if(SlashOverlay && Attributes)
+	{
+		SlashOverlay->SetHealthBarPercent(Attributes->GetHealthPercent());
+	}
+}
+
 float ASlashCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
-	AActor* DamageCauser)
+                                  AActor* DamageCauser)
 {
 	HandleDamage(DamageAmount);
+	SetHUDHealth();
 	return DamageAmount;
 }
 
@@ -122,10 +131,13 @@ void ASlashCharacter::LookUp(float Value)
 	AddControllerPitchInput(Value);
 }
 
+// 무방비 상태일 경우에만 점프 가능.
 void ASlashCharacter::Jump()
 {
-	bPressedJump = true;
-	JumpKeyHoldTime = 0.0f;
+	if (IsUnoccupied())
+	{
+		Super::Jump();
+	}
 }
 
 void ASlashCharacter::Attack()
@@ -152,19 +164,19 @@ void ASlashCharacter::AttackEnd()
 
 bool ASlashCharacter::CanAttack()
 {
-	return ActionState == EActionState::EAS_Unoccupied
+	return IsUnoccupied()
 	&& CharacterState != ECharacterState::ECS_UnEquipped;
 }
 
 bool ASlashCharacter::CanDisarm()
 {
-	return ActionState == EActionState::EAS_Unoccupied
+	return IsUnoccupied()
 	&& CharacterState != ECharacterState::ECS_UnEquipped;
 }
 
 bool ASlashCharacter::CanArm()
 {
-	return ActionState == EActionState::EAS_Unoccupied
+	return IsUnoccupied()
 	&& CharacterState == ECharacterState::ECS_UnEquipped
 	&& EquippedWeapon;
 }
@@ -260,4 +272,9 @@ void ASlashCharacter::InitializeSlashOverlay()
 			}
 		}
 	}
+}
+
+bool ASlashCharacter::IsUnoccupied()
+{
+	return ActionState == EActionState::EAS_Unoccupied;
 }
