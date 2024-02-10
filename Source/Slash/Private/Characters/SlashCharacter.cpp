@@ -2,13 +2,16 @@
 
 
 #include "Characters/SlashCharacter.h"
+#include "Animation//AnimMontage.h"
 #include "Camera/CameraComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
+#include "Components/AttributeComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "HUD/SlashHUD.h"
+#include "HUD/SlashOverlay.h"
 #include "Items/Item.h"
 #include "Items/Weapon.h"
-#include "Animation//AnimMontage.h"
 
 ASlashCharacter::ASlashCharacter()
 {
@@ -72,6 +75,7 @@ void ASlashCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	Tags.Add(FName("EngageableTarget"));
+	InitializeSlashOverlay();
 }
 
 void ASlashCharacter::MoveForward(float Value)
@@ -235,4 +239,24 @@ void ASlashCharacter::FinishEquipping()
 void ASlashCharacter::HitReactEnd()
 {
 	ActionState = EActionState::EAS_Unoccupied;
+}
+
+void ASlashCharacter::InitializeSlashOverlay()
+{
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (PlayerController)
+	{
+		ASlashHUD* SlashHUD = Cast<ASlashHUD>(PlayerController->GetHUD());
+		if (SlashHUD)
+		{
+			SlashOverlay = SlashHUD->GetSlashOverlay();
+			if (SlashOverlay && Attributes)
+			{
+				SlashOverlay->SetHealthBarPercent(Attributes->GetHealthPercent());
+				SlashOverlay->SetStaminaBarPercent(1.f);
+				SlashOverlay->SetGold(0);
+				SlashOverlay->SetSouls(0);
+			}
+		}
+	}
 }
