@@ -106,7 +106,7 @@ void AEnemy::BeginPlay()
 		PawnSensing->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
 	}
 	InitializeEnemy();
-	Tags.Add(FName("Enemey"));
+	Tags.Add(FName("Enemy"));
 }
 
 //Enemy Death 실행
