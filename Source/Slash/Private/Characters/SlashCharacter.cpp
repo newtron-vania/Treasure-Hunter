@@ -60,6 +60,13 @@ void ASlashCharacter::GetHit_Implementation(const FVector& ImpactPoint, AActor* 
 	ActionState = EActionState::EAS_HitReaction;
 }
 
+float ASlashCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	HandleDamage(DamageAmount);
+	return DamageAmount;
+}
+
 void ASlashCharacter::BeginPlay()
 {
 	Super::BeginPlay();
