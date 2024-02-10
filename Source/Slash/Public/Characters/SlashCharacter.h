@@ -11,6 +11,7 @@ class AWeapon;
 class UCameraComponent;
 class USpringArmComponent;
 class AItem;
+class USlashOverlay;
 
 
 UCLASS()
@@ -58,7 +59,10 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void HitReactEnd();
 
-private:	
+private:
+	void InitializeSlashOverlay();
+
+	
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* CameraBoom;
 
@@ -76,7 +80,8 @@ private:
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	EActionState ActionState = EActionState::EAS_Unoccupied;
 
-
+	UPROPERTY()
+	USlashOverlay* SlashOverlay;
 public:
 	FORCEINLINE void SetOverlappingItem(AItem *Item) {OverlappingItem = Item; }
 	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState; }
