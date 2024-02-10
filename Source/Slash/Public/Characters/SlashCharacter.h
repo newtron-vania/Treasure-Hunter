@@ -22,8 +22,9 @@ class SLASH_API ASlashCharacter : public ABaseCharacter
 public:
 	ASlashCharacter();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	virtual void Jump() override;
 	virtual void GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter) override;
+
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 protected:
 	virtual void BeginPlay() override;
@@ -33,7 +34,6 @@ protected:
 	void MoveRight(float Value);
 	void Turn(float Value);
 	void LookUp(float Value);
-	void Jump();
 	void EKeyPressed();
 	virtual void Attack() override;
 
@@ -61,8 +61,10 @@ protected:
 
 private:
 	void InitializeSlashOverlay();
+	void SetHUDHealth();
+	bool IsUnoccupied();
 
-	
+	/** Character Component */
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* CameraBoom;
 
