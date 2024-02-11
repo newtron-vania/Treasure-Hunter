@@ -62,9 +62,9 @@ void AEnemy::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)
 	if(!IsDead()) SetHealthBarVisible(true);
 	ClearPatrolTimer();
 	ClearAttackTimer();
-
+	
+	SetWeaponCollisionEnabled(ECollisionEnabled::NoCollision);
 	StopAttackMontage();
-	StopAnimMontage();
 }
 
 /*
@@ -201,7 +201,7 @@ void AEnemy::CheckPatrolTarget()
  */
 void AEnemy::CheckCombatTarget()
 {
-	if(IsOutsidedCombatRadius())
+	if(IsOutsideCombatRadius())
 	{
 		ClearAttackTimer();
 		LooseInterest();
@@ -261,7 +261,7 @@ void AEnemy::ChaseTarget()
 	MoveToTarget(CombatTarget);
 }
 
-bool AEnemy::IsOutsidedCombatRadius()
+bool AEnemy::IsOutsideCombatRadius()
 {
 	return !InTargetRange(CombatTarget, CombatRadius);
 }
