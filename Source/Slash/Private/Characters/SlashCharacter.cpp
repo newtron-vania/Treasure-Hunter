@@ -2,6 +2,7 @@
 
 
 #include "Characters/SlashCharacter.h"
+
 #include "Animation//AnimMontage.h"
 #include "Camera/CameraComponent.h"
 #include "Components/AttributeComponent.h"
@@ -77,6 +78,16 @@ float ASlashCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
 	HandleDamage(DamageAmount);
 	SetHUDHealth();
 	return DamageAmount;
+}
+
+void ASlashCharacter::SetOverlappingItem(AItem* Item)
+{
+	OverlappingItem = Item;
+}
+
+void ASlashCharacter::AddSouls(ASoul* Soul)
+{
+	
 }
 
 void ASlashCharacter::BeginPlay()
