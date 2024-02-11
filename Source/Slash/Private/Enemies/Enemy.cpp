@@ -112,9 +112,10 @@ void AEnemy::BeginPlay()
 //Enemy Death 실행
 void AEnemy::Die()
 {
+	Super::Die();
+	
 	EnemyAlive = EDeathOrAlive::EDA_Dead;
 	
-	PlayDeathMontage();
 	ClearAttackTimer();
 	SetHealthBarVisible(false);
 	DisableCapsule();

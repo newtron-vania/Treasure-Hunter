@@ -23,6 +23,7 @@ public:
 	ASlashCharacter();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void Jump() override;
+	virtual void Die() override;
 	virtual void GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter) override;
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
@@ -87,5 +88,5 @@ private:
 public:
 	FORCEINLINE void SetOverlappingItem(AItem *Item) {OverlappingItem = Item; }
 	FORCEINLINE ECharacterState GetCharacterState() const { return CharacterState; }
-
+	FORCEINLINE EActionState GetActionState() const {return ActionState; }
 };
