@@ -54,7 +54,7 @@ protected:
 	EItemState ItemState = EItemState::EIS_Hovering;
 
 	UPROPERTY(VisibleAnywhere, Category="Item Properties")
-	UNiagaraComponent* EmbersEffect;
+	UNiagaraComponent* ItemEffect;
 	
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
