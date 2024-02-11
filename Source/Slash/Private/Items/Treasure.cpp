@@ -4,19 +4,11 @@
 #include "Items/Treasure.h"
 
 #include "Characters/SlashCharacter.h"
-#include "Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 
 void ATreasure::PlayCoinSound()
 {
-	if(PickupSound)
-	{
-		UGameplayStatics::PlaySoundAtLocation(
-			GetWorld(),
-			PickupSound,
-			GetActorLocation()
-		);
-	}
+	SpawnPickupSound();
 }
 
 void ATreasure::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
