@@ -13,7 +13,6 @@ class UCameraComponent;
 class USpringArmComponent;
 class AItem;
 class ASoul;
-class ATreasure;
 class USlashOverlay;
 
 
@@ -32,7 +31,6 @@ public:
 	
 	virtual void SetOverlappingItem(AItem* Item) override;
 	virtual void AddSouls(ASoul* Soul) override;
-	virtual void AddGold(ATreasure* Treasure) override;
 protected:
 	virtual void BeginPlay() override;
 
