@@ -2,10 +2,10 @@
 
 
 #include "Items/Item.h"
-#include "Components/SphereComponent.h"
-#include "Math/UnitConversion.h"
 #include "NiagaraComponent.h"
 #include "Characters/SlashCharacter.h"
+#include "Components/SphereComponent.h"
+#include "Interfaces/PickupInterface.h"
 
 AItem::AItem()
 {
@@ -17,8 +17,8 @@ AItem::AItem()
 	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
 	Sphere->SetupAttachment(GetRootComponent());
 
-	EmbersEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Embers"));
-	EmbersEffect->SetupAttachment(GetRootComponent());
+	ItemEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Embers"));
+	ItemEffect->SetupAttachment(GetRootComponent());
 
 }
 
@@ -46,10 +46,10 @@ void AItem::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 {
 	const FString OtherActorName = OtherActor->GetName();
 
-	ASlashCharacter* SlashCharacter = Cast<ASlashCharacter>(OtherActor);
-	if(SlashCharacter)
+	IPickupInterface* PickupInterface = Cast<IPickupInterface>(OtherActor);
+	if(PickupInterface)
 	{
-		SlashCharacter -> SetOverlappingItem(this);
+		PickupInterface -> SetOverlappingItem(this);
 	}
 }
 
