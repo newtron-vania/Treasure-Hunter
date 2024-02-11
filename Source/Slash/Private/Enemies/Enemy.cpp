@@ -4,13 +4,14 @@
 #include "Enemies/Enemy.h"
 #include "AIController.h"
 #include "AI/Navigation/NavigationTypes.h"
+#include "Characters/SlashCharacter.h"
+#include "Components/AttributeComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Perception/PawnSensingComponent.h"
-#include "Components/AttributeComponent.h"
 #include "HUD/HealthBarComponent.h"
-#include "Characters/SlashCharacter.h"
+#include "Items/Soul.h"
 #include "Items/Weapon.h"
+#include "Perception/PawnSensingComponent.h"
 
 AEnemy::AEnemy()
 {
@@ -122,6 +123,20 @@ void AEnemy::Die()
 	SetLifeSpan(DeathLifeSpan);
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	SetWeaponCollisionEnabled(ECollisionEnabled::NoCollision);
+	SpawnSoul();
+}
+
+void AEnemy::SpawnSoul()
+{
+	UWorld* World = GetWorld();
+	if (World && SoulClass && Attributes)
+	{
+		ASoul* SpawnedSoul = World->SpawnActor<ASoul>(SoulClass, GetActorLocation(), GetActorRotation());
+		if (SpawnedSoul)
+		{
+			SpawnedSoul->SetSouls(Attributes->GetSouls());
+		}
+	}
 }
 
 void AEnemy::Attack()
