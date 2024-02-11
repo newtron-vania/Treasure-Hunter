@@ -140,6 +140,14 @@ void ASlashCharacter::Jump()
 	}
 }
 
+void ASlashCharacter::Die()
+{
+	Super::Die();
+
+	ActionState = EActionState::EAS_Dead;
+	DisableMeshCollision();
+}
+
 void ASlashCharacter::Attack()
 {
 	Super::Attack();

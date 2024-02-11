@@ -1,10 +1,9 @@
 #include "Characters/BaseCharacter.h"
+#include "Components/AttributeComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Items/Weapon.h"
-#include "Components/AttributeComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Slash/DebugMacros.h"
 
 ABaseCharacter::ABaseCharacter()
 {
@@ -40,6 +39,12 @@ void ABaseCharacter::Attack()
 
 void ABaseCharacter::Die()
 {
+	PlayDeathMontage();
+}
+
+void ABaseCharacter::DisableMeshCollision()
+{
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void ABaseCharacter::PlayMontageSection(UAnimMontage* Montage, FName SectionName)

@@ -38,5 +38,6 @@ void USlashAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	//Set CharacterState
 	CharacterState = SlashCharacter->GetCharacterState();
-	
+
+	ActionState = SlashCharacter->GetActionState();
 }
