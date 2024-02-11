@@ -21,9 +21,6 @@ protected:
 	virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
 private:
-	UPROPERTY(EditDefaultsOnly, Category = Sounds)
-	USoundBase* PickupSound;
-
 	UPROPERTY(EditAnywhere, Category = "Treasure Properties")
 	int32 Gold;
 };
