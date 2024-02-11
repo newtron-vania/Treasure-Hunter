@@ -161,7 +161,7 @@ int32 ABaseCharacter::PlayDeathMontage()
 	if(AnimInstance && DeathMontages.Num() > 0)
 	{
 		Selection = FMath::RandRange(0, DeathMontages.Num()-1);
-		UAnimMontage* Montage = DeathMontages[FMath::RandRange(0, Selection)];
+		UAnimMontage* Montage = DeathMontages[Selection];
 		AnimInstance->Montage_Play(Montage);
 	}
 	return Selection;

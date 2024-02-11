@@ -62,7 +62,7 @@ private:
 	void LooseInterest();
 	void StartPatrolling();
 	void ChaseTarget();
-	bool IsOutsidedCombatRadius();
+	bool IsOutsideCombatRadius();
 	bool IsOutsideAttackRadius();
 	bool IsInsideAttackRadius();
 	bool IsChasing();
