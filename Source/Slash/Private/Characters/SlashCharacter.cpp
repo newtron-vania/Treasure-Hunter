@@ -6,6 +6,7 @@
 #include "Animation//AnimMontage.h"
 #include "Camera/CameraComponent.h"
 #include "Components/AttributeComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -200,6 +201,8 @@ void ASlashCharacter::Dodge()
 
 	PlayDodgeMontage();
 	ActionState = EActionState::EAS_Dodge;
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
 	if (Attributes && SlashOverlay)
 	{
 		Attributes->UseStamina(Attributes->GetDodgeCost());
@@ -323,7 +326,7 @@ void ASlashCharacter::HitReactEnd()
 void ASlashCharacter::DodgeEnd()
 {
 	Super::DodgeEnd();
-
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	ActionState = EActionState::EAS_Unoccupied;
 }
 

@@ -220,6 +220,7 @@ void ABaseCharacter::AttackEnd()
 
 void ABaseCharacter::DodgeEnd()
 {
+
 }
 
 bool ABaseCharacter::IsAlive()
