@@ -201,7 +201,7 @@ void ASlashCharacter::Dodge()
 
 	PlayDodgeMontage();
 	ActionState = EActionState::EAS_Dodge;
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
 	if (Attributes && SlashOverlay)
 	{
@@ -326,7 +326,7 @@ void ASlashCharacter::HitReactEnd()
 void ASlashCharacter::DodgeEnd()
 {
 	Super::DodgeEnd();
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	//GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	ActionState = EActionState::EAS_Unoccupied;
 }
 
