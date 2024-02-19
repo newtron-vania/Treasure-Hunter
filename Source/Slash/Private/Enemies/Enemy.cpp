@@ -65,6 +65,11 @@ void AEnemy::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)
 	
 	SetWeaponCollisionEnabled(ECollisionEnabled::NoCollision);
 	StopAttackMontage();
+
+	if(IsInsideAttackRadius())
+	{
+		if(!IsDead()) StartAttackTimer();
+	}
 }
 
 /*
@@ -160,7 +165,7 @@ bool AEnemy::CanAttack()
 
 void AEnemy::AttackEnd()
 {
-	EnemyState = EEnemyState::EES_NoState;
+	EnemyState = EEnemyState::EES_Idle;
 	CheckCombatTarget();
 }
 
