@@ -94,11 +94,12 @@ void ATestAttacker::ExecuteGetHit(const FHitResult& BoxHit)
     IHitInterface* HitInterface = Cast<IHitInterface>(BoxHit.GetActor());
     if (HitInterface)
     {
-        HitInterface->Execute_GetHit(BoxHit.GetActor(), BoxHit.ImpactPoint, GetOwner());
+        HitInterface->Execute_GetHit(BoxHit.GetActor(), BoxHit.ImpactPoint, this);
     }
 }
 
 bool ATestAttacker::IsAlly(ABaseCharacter* Target)
 {
+    
     return false;
 }
