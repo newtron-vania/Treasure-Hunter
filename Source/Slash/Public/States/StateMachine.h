@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Characters/CharacterTypes.h"
 
 class BaseState;
 class ABaseCharacter;
@@ -19,11 +18,10 @@ public:
 	~StateMachine();
 
 	bool RegisterState(BaseState* State);
-	bool ChangeState(EEnemyState EnemyState);
 	bool Update();
 
 private:
-	TUniquePtr<BaseState> state;
+	TUniquePtr<BaseState> CurrentState;
 
 	ABaseCharacter* BasedCharacter;
 };

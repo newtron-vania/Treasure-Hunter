@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "BaseState.h"
-#include "Characters/BaseCharacter.h"
 
 class ABaseCharacter;
 class AEnemy;

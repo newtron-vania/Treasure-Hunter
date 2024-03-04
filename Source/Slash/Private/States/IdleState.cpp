@@ -10,3 +10,18 @@ IdleState::IdleState()
 IdleState::~IdleState()
 {
 }
+
+bool IdleState::Enter()
+{
+	return false;
+}
+
+bool IdleState::Update()
+{
+	return false;
+}
+
+bool IdleState::Exit()
+{
+	return false;
+}

@@ -10,3 +10,18 @@ ChasingState::ChasingState()
 ChasingState::~ChasingState()
 {
 }
+
+bool ChasingState::Enter()
+{
+	return false;
+}
+
+bool ChasingState::Update()
+{
+	return false;
+}
+
+bool ChasingState::Exit()
+{
+	return false;
+}

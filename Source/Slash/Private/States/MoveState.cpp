@@ -10,3 +10,18 @@ MoveState::MoveState()
 MoveState::~MoveState()
 {
 }
+
+bool MoveState::Enter()
+{
+	return false;
+}
+
+bool MoveState::Update()
+{
+	return false;
+}
+
+bool MoveState::Exit()
+{
+	return false;
+}

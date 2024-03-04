@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Characters/BaseCharacter.h"
 
 class ABaseCharacter;
 class AEnemy;
@@ -14,8 +13,14 @@ class IEnemyStateInterface;
 class SLASH_API BaseState
 {
 public:
-	BaseState();
-	virtual ~BaseState();
+	BaseState()
+	{
+		
+	}
+	virtual ~BaseState()
+	{
+		
+	}
 
 	virtual bool Enter() = 0;
 	virtual bool Update() = 0;

@@ -10,3 +10,18 @@ PatrolState::PatrolState()
 PatrolState::~PatrolState()
 {
 }
+
+bool PatrolState::Enter()
+{
+	return false;
+}
+
+bool PatrolState::Update()
+{
+	return false;
+}
+
+bool PatrolState::Exit()
+{
+	return false;
+}
