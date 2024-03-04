@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Characters/CharacterTypes.h"
 
+class BaseState;
+class ABaseCharacter;
 class AEnemy;
 class IEnemyStateInterface;
 /**
@@ -16,22 +18,12 @@ public:
 	StateMachine();
 	~StateMachine();
 
-	bool RegisterState(IEnemyStateInterface* EnemyStateInterface);
+	bool RegisterState(BaseState* State);
 	bool ChangeState(EEnemyState EnemyState);
+	bool Update();
 
 private:
-	TMap<EEnemyState, IEnemyStateInterface*> RegisteredStates;
-	
-	EEnemyState CurrentState;
+	TUniquePtr<BaseState> state;
 
-	APawn* StateActor;
-
-	APawn* PatrolTarget;
-
-	APawn* CombatTarget;
-	
-	
-
-
-	
+	ABaseCharacter* BasedCharacter;
 };
