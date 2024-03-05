@@ -3,14 +3,6 @@
 
 #include "Strategy/CharacterStrategy/Attack/SimpleAttack.h"
 
-SimpleAttack::SimpleAttack()
-{
-}
-
-SimpleAttack::~SimpleAttack()
-{
-}
-
-void SimpleAttack::Execute()
+void USimpleAttack::Execute()
 {
 }

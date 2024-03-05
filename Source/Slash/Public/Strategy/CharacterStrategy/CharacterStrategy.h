@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Object.h"
+#include "UObject/Interface.h"
+#include "CharacterStrategy.generated.h"
 
 class ABaseCharacter;
 /**
@@ -25,6 +26,5 @@ public:
 	virtual void ClearCharacter();
 
 	ABaseCharacter* Character;
-
 	
 };

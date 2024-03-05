@@ -4,29 +4,17 @@
 #include "Strategy/CharacterStrategy/Move/SimplePlayerInputMoveStrategy.h"
 
 #include "Characters/BaseCharacter.h"
-#include "Characters/SlashCharacter.h"
 
-SimplePlayerInputMoveStrategy::SimplePlayerInputMoveStrategy()
-{
-}
-SimplePlayerInputMoveStrategy::~SimplePlayerInputMoveStrategy()
-{
-}
 
-void SimplePlayerInputMoveStrategy::SetCharacter(ABaseCharacter* NewCharacter)
+void USimplePlayerInputMoveStrategy::SetupInputBindings(UInputComponent* PlayerInputComponent)
 {
-	BaseMoveStrategy::SetCharacter(NewCharacter);
+	PlayerInputComponent->BindAxis(FName("MoveForward"), this, &USimplePlayerInputMoveStrategy::MoveForward);
+	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &USimplePlayerInputMoveStrategy::MoveRight);
+	PlayerInputComponent->BindAxis(FName("TurnRight"), this, &USimplePlayerInputMoveStrategy::Turn);
+	PlayerInputComponent->BindAxis(FName("LookUp"), this, &USimplePlayerInputMoveStrategy::LookUp);
 }
 
-void SimplePlayerInputMoveStrategy::SetupInputBindings(UInputComponent* PlayerInputComponent)
-{
-	PlayerInputComponent->BindAxis(FName("MoveForward"), this, &SimplePlayerInputMoveStrategy::MoveForward);
-	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &SimplePlayerInputMoveStrategy::MoveRight);
-	PlayerInputComponent->BindAxis(FName("TurnRight"), this, &SimplePlayerInputMoveStrategy::Turn);
-	PlayerInputComponent->BindAxis(FName("LookUp"), this, &SimplePlayerInputMoveStrategy::LookUp);
-}
-
-void SimplePlayerInputMoveStrategy::ClearInputBindings(UInputComponent* PlayerInputComponent)
+void USimplePlayerInputMoveStrategy::ClearInputBindings(UInputComponent* PlayerInputComponent)
 {
 	PlayerInputComponent->RemoveAxisBinding(FName("MoveForward"));
 	PlayerInputComponent->RemoveAxisBinding(FName("MoveRight"));
@@ -34,12 +22,12 @@ void SimplePlayerInputMoveStrategy::ClearInputBindings(UInputComponent* PlayerIn
 	PlayerInputComponent->RemoveAxisBinding(FName("LookUp"));
 }
 
-void SimplePlayerInputMoveStrategy::Move()
+void USimplePlayerInputMoveStrategy::Move()
 {
 }
 
 
-void SimplePlayerInputMoveStrategy::MoveForward(float Value)
+void USimplePlayerInputMoveStrategy::MoveForward(float Value)
 {
 	if(Character->Controller && (Value != 0.f))
 	{
@@ -51,7 +39,7 @@ void SimplePlayerInputMoveStrategy::MoveForward(float Value)
 	}
 }
 
-void SimplePlayerInputMoveStrategy::MoveRight(float Value)
+void USimplePlayerInputMoveStrategy::MoveRight(float Value)
 {
 	if(Character->Controller && (Value != 0.f))
 	{
@@ -64,12 +52,12 @@ void SimplePlayerInputMoveStrategy::MoveRight(float Value)
 	}
 }
 
-void SimplePlayerInputMoveStrategy::Turn(float Value)
+void USimplePlayerInputMoveStrategy::Turn(float Value)
 {
 	Character->AddControllerYawInput(Value);
 }
 
-void SimplePlayerInputMoveStrategy::LookUp(float Value)
+void USimplePlayerInputMoveStrategy::LookUp(float Value)
 {
 	Character->AddControllerPitchInput(Value);
 }

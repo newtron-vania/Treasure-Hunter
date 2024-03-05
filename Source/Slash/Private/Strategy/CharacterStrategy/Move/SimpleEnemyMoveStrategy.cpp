@@ -3,22 +3,15 @@
 
 #include "Strategy/CharacterStrategy/Move/SimpleEnemyMoveStrategy.h"
 
-SimpleEnemyMoveStrategy::SimpleEnemyMoveStrategy()
+
+void USimpleEnemyMoveStrategy::SetupInputBindings(UInputComponent* PlayerInputComponent)
 {
 }
 
-SimpleEnemyMoveStrategy::~SimpleEnemyMoveStrategy()
+void USimpleEnemyMoveStrategy::ClearInputBindings(UInputComponent* PlayerInputComponent)
 {
 }
 
-void SimpleEnemyMoveStrategy::SetupInputBindings(UInputComponent* PlayerInputComponent)
-{
-}
-
-void SimpleEnemyMoveStrategy::ClearInputBindings(UInputComponent* PlayerInputComponent)
-{
-}
-
-void SimpleEnemyMoveStrategy::Move()
+void USimpleEnemyMoveStrategy::Move()
 {
 }

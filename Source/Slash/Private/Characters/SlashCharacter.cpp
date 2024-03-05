@@ -16,7 +16,7 @@
 #include "Items/Soul.h"
 #include "Items/Treasure.h"
 #include "Items/Weapon.h"
-#include "Strategy/CharacterStrategy/BaseMoveStrategy.h"
+#include "Strategy/CharacterStrategy/MoveStrategy.h"
 #include "Strategy/CharacterStrategy/Move/SimplePlayerInputMoveStrategy.h"
 
 ASlashCharacter::ASlashCharacter()
@@ -47,7 +47,7 @@ ASlashCharacter::ASlashCharacter()
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 	//Initialize Strategy
-	MoveStrategy = new SimplePlayerInputMoveStrategy();
+	MoveStrategy = NewObject<USimplePlayerInputMoveStrategy>();
 	MoveStrategy->SetCharacter(this);
 }
 

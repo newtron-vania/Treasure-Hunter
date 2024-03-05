@@ -4,12 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "CharacterStrategy.h"
+#include "MoveStrategy.generated.h"
 
-/**
- * 
- */
-class SLASH_API BaseMoveStrategy : public ICharacterStrategy
+UINTERFACE(MinimalAPI)
+class UMoveStrategy : public UCharacterStrategy {
+	GENERATED_BODY()
+};
+
+
+class SLASH_API IMoveStrategy : public ICharacterStrategy
 {
+	GENERATED_BODY()
 public:
 
 	virtual void Execute() override ;

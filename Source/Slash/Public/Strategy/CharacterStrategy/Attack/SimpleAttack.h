@@ -3,13 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Strategy/CharacterStrategy/BaseAttackStrategy.h"
+#include "Strategy/CharacterStrategy/AttackStrategy.h"
+#include "SimpleAttack.generated.h"
 
 /**
  * 
  */
-class SLASH_API SimpleAttack : public BaseAttackStrategy
+UCLASS()
+class SLASH_API USimpleAttack : public UObject, public IAttackStrategy
 {
+	GENERATED_BODY()
 public:
 
 	virtual void Execute() override;
