@@ -46,6 +46,9 @@ protected:
 	void PlayDodgeMontage();
 	void StopAttackMontage();
 
+	/** Strategy */
+	void ChangeMoveStrategy(IMoveStrategy* MoveStrategy);
+
 	UFUNCTION(BlueprintCallable)
 	FVector GetTranslationWarpTarget();
 

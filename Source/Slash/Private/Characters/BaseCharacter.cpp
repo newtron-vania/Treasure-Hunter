@@ -4,6 +4,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Items/Weapon.h"
 #include "Kismet/GameplayStatics.h"
+#include "Strategy/CharacterStrategy/MoveStrategy.h"
 
 ABaseCharacter::ABaseCharacter()
 {
@@ -179,6 +180,13 @@ void ABaseCharacter::StopAttackMontage()
 	{
 		AnimInstance->Montage_Stop(0.25f, AttackMontage);
 	}
+}
+
+void ABaseCharacter::ChangeMoveStrategy(IMoveStrategy* MoveStrategy)
+{
+	this->MoveStrategy->ClearInputBindings(this->InputComponent);
+	this->MoveStrategy = MoveStrategy;
+	this->MoveStrategy->SetupInputBindings(this->InputComponent);
 }
 
 FVector ABaseCharacter::GetTranslationWarpTarget()
