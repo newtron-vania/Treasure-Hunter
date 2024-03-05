@@ -58,17 +58,17 @@ void ASlashCharacter::Tick(float DeltaTime)
 		Attributes->RegenStamina(DeltaTime);
 		SlashOverlay->SetStaminaBarPercent(Attributes->GetStaminaPercent());
 	}
+	if(MoveStrategy)
+	{
+		MoveStrategy->Execute();
+	}
 }
 
 void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	MoveStrategy->SetupInputBindings(PlayerInputComponent);
-	// PlayerInputComponent->BindAxis(FName("MoveForward"), this, &ASlashCharacter::MoveForward);
-	// PlayerInputComponent->BindAxis(FName("MoveRight"), this, &ASlashCharacter::MoveRight);
-	// PlayerInputComponent->BindAxis(FName("TurnRight"), this, &ASlashCharacter::Turn);
-	// PlayerInputComponent->BindAxis(FName("LookUp"), this, &ASlashCharacter::LookUp);
-	//
+	
 	// PlayerInputComponent->BindAction(FName("Jump"), IE_Pressed, this, &ASlashCharacter::Jump);
 	// PlayerInputComponent->BindAction(FName("Equip"), IE_Pressed, this, &ASlashCharacter::EKeyPressed);
 	// PlayerInputComponent->BindAction(FName("Attack"), IE_Pressed, this, &ASlashCharacter::Attack);
@@ -128,50 +128,6 @@ void ASlashCharacter::BeginPlay()
 
 	Tags.Add(FName("EngageableTarget"));
 	InitializeSlashOverlay();
-}
-
-void ASlashCharacter::MoveForward(float Value)
-{
-	if(ActionState != EActionState::EAS_Unoccupied)
-	{
-		return;
-	}
-	if(Controller && (Value != 0.f))
-	{
-		const FRotator ControlRotation = GetControlRotation();
-		const FRotator YawRotation(0.f, ControlRotation.Yaw, 0.f);
-
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, Value);
-	}
-}
-
-void ASlashCharacter::MoveRight(float Value)
-{
-	if(ActionState != EActionState::EAS_Unoccupied)
-	{
-		return;
-	}
-	if(Controller && (Value != 0.f))
-	{
-		//Find out which way is right
-		const FRotator ControlRotation = GetControlRotation();
-		const FRotator YawRotation(0.f, ControlRotation.Yaw, 0.f);
-
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		AddMovementInput(Direction, Value);
-	}
-}
-
-void ASlashCharacter::Turn(float Value)
-{
-	AddControllerYawInput(Value);
-	
-}
-
-void ASlashCharacter::LookUp(float Value)
-{
-	AddControllerPitchInput(Value);
 }
 
 // 무방비 상태일 경우에만 점프 가능.

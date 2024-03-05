@@ -8,8 +8,3 @@ void IMoveStrategy::Execute()
 	Move();
 }
 
-void IMoveStrategy::Move()
-{
-	
-}
-

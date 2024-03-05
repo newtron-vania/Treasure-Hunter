@@ -20,7 +20,7 @@ public:
 	virtual void Execute() override ;
 	virtual void SetupInputBindings(UInputComponent* PlayerInputComponent) = 0;
 	virtual void ClearInputBindings(UInputComponent* PlayerInputComponent) = 0;
-
 private:
 	virtual void Move() = 0;
+	
 };

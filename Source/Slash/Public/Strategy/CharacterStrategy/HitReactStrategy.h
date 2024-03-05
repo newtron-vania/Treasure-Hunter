@@ -18,6 +18,5 @@ class SLASH_API IHitReactStrategy : public ICharacterStrategy
 {
 	GENERATED_BODY()
 public:
-
 	virtual void Execute() override;
 };

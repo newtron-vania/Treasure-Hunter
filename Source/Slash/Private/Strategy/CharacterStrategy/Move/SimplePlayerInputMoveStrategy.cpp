@@ -4,26 +4,40 @@
 #include "Strategy/CharacterStrategy/Move/SimplePlayerInputMoveStrategy.h"
 
 #include "Characters/BaseCharacter.h"
-
+#include "Characters/SlashCharacter.h"
 
 void USimplePlayerInputMoveStrategy::SetupInputBindings(UInputComponent* PlayerInputComponent)
 {
-	PlayerInputComponent->BindAxis(FName("MoveForward"), this, &USimplePlayerInputMoveStrategy::MoveForward);
-	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &USimplePlayerInputMoveStrategy::MoveRight);
-	PlayerInputComponent->BindAxis(FName("TurnRight"), this, &USimplePlayerInputMoveStrategy::Turn);
-	PlayerInputComponent->BindAxis(FName("LookUp"), this, &USimplePlayerInputMoveStrategy::LookUp);
+	PlayerInputComponent->BindAxis("MoveForward");
+	PlayerInputComponent->BindAxis("MoveRight");
+	PlayerInputComponent->BindAxis("TurnRight");
+	PlayerInputComponent->BindAxis("LookUp");
 }
 
 void USimplePlayerInputMoveStrategy::ClearInputBindings(UInputComponent* PlayerInputComponent)
 {
-	PlayerInputComponent->RemoveAxisBinding(FName("MoveForward"));
-	PlayerInputComponent->RemoveAxisBinding(FName("MoveRight"));
-	PlayerInputComponent->RemoveAxisBinding(FName("TurnRight"));
-	PlayerInputComponent->RemoveAxisBinding(FName("LookUp"));
+	PlayerInputComponent->RemoveAxisBinding("MoveForward");
+	PlayerInputComponent->RemoveAxisBinding("MoveRight");
+	PlayerInputComponent->RemoveAxisBinding("TurnRight");
+	PlayerInputComponent->RemoveAxisBinding("LookUp");
 }
 
 void USimplePlayerInputMoveStrategy::Move()
 {
+	UInputComponent* InputComponent = Character->InputComponent;
+	
+	if (InputComponent)
+	{
+		const float ForwardValue = InputComponent->GetAxisValue("MoveForward");
+		const float RightValue = InputComponent->GetAxisValue("MoveRight");
+		const float TurnRightValue = InputComponent->GetAxisValue("TurnRight");
+		const float LookUpValue = InputComponent->GetAxisValue("LookUp");
+
+		MoveForward(ForwardValue);
+		MoveRight(RightValue);
+		Turn(TurnRightValue);
+		LookUp(LookUpValue);
+	}
 }
 
 

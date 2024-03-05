@@ -39,10 +39,6 @@ protected:
 	virtual void BeginPlay() override;
 
 	/** Callbacks for Input */
-	void MoveForward(float Value);
-	void MoveRight(float Value);
-	void Turn(float Value);
-	void LookUp(float Value);
 	void EKeyPressed();
 	virtual void Attack() override;
 	void Dodge();
