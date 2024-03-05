@@ -16,6 +16,8 @@
 #include "Items/Soul.h"
 #include "Items/Treasure.h"
 #include "Items/Weapon.h"
+#include "Strategy/CharacterStrategy/BaseMoveStrategy.h"
+#include "Strategy/CharacterStrategy/Move/SimplePlayerInputMoveStrategy.h"
 
 ASlashCharacter::ASlashCharacter()
 {
@@ -44,6 +46,9 @@ ASlashCharacter::ASlashCharacter()
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
+	//Initialize Strategy
+	MoveStrategy = new SimplePlayerInputMoveStrategy();
+	MoveStrategy->SetCharacter(this);
 }
 
 void ASlashCharacter::Tick(float DeltaTime)
@@ -58,15 +63,16 @@ void ASlashCharacter::Tick(float DeltaTime)
 void ASlashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	PlayerInputComponent->BindAxis(FName("MoveForward"), this, &ASlashCharacter::MoveForward);
-	PlayerInputComponent->BindAxis(FName("MoveRight"), this, &ASlashCharacter::MoveRight);
-	PlayerInputComponent->BindAxis(FName("TurnRight"), this, &ASlashCharacter::Turn);
-	PlayerInputComponent->BindAxis(FName("LookUp"), this, &ASlashCharacter::LookUp);
-
-	PlayerInputComponent->BindAction(FName("Jump"), IE_Pressed, this, &ASlashCharacter::Jump);
-	PlayerInputComponent->BindAction(FName("Equip"), IE_Pressed, this, &ASlashCharacter::EKeyPressed);
-	PlayerInputComponent->BindAction(FName("Attack"), IE_Pressed, this, &ASlashCharacter::Attack);
-	PlayerInputComponent->BindAction(FName("Dodge"), IE_Pressed, this, &ASlashCharacter::Dodge);
+	MoveStrategy->SetupInputBindings(PlayerInputComponent);
+	// PlayerInputComponent->BindAxis(FName("MoveForward"), this, &ASlashCharacter::MoveForward);
+	// PlayerInputComponent->BindAxis(FName("MoveRight"), this, &ASlashCharacter::MoveRight);
+	// PlayerInputComponent->BindAxis(FName("TurnRight"), this, &ASlashCharacter::Turn);
+	// PlayerInputComponent->BindAxis(FName("LookUp"), this, &ASlashCharacter::LookUp);
+	//
+	// PlayerInputComponent->BindAction(FName("Jump"), IE_Pressed, this, &ASlashCharacter::Jump);
+	// PlayerInputComponent->BindAction(FName("Equip"), IE_Pressed, this, &ASlashCharacter::EKeyPressed);
+	// PlayerInputComponent->BindAction(FName("Attack"), IE_Pressed, this, &ASlashCharacter::Attack);
+	// PlayerInputComponent->BindAction(FName("Dodge"), IE_Pressed, this, &ASlashCharacter::Dodge);
 }
 
 void ASlashCharacter::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)

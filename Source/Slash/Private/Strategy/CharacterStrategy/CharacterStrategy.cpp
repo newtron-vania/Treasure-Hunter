@@ -3,10 +3,17 @@
 
 #include "Strategy/CharacterStrategy/CharacterStrategy.h"
 
-CharacterStrategy::CharacterStrategy()
+
+void ICharacterStrategy::SetCharacter(ABaseCharacter* NewCharacter)
 {
+	if(NewCharacter)
+	{
+		Character = NewCharacter;
+	}
+	
 }
 
-CharacterStrategy::~CharacterStrategy()
+void ICharacterStrategy::ClearCharacter()
 {
+	Character = nullptr;
 }

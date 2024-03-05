@@ -3,15 +3,28 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UObject/Object.h"
 
+class ABaseCharacter;
 /**
  * 
  */
-class SLASH_API CharacterStrategy
-{
-public:
-	CharacterStrategy();
-	~CharacterStrategy();
 
+UINTERFACE(MinimalAPI, Blueprintable)
+class UCharacterStrategy : public UInterface {
+	GENERATED_BODY()
+};
+
+class SLASH_API ICharacterStrategy
+{
+	GENERATED_BODY()
+	
+public:
 	virtual void Execute() = 0;
+	virtual void SetCharacter(ABaseCharacter* NewCharacter);
+	virtual void ClearCharacter();
+
+	ABaseCharacter* Character;
+
+	
 };

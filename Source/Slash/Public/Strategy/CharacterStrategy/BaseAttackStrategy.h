@@ -8,11 +8,9 @@
 /**
  * 
  */
-class SLASH_API BaseAttackStrategy : public CharacterStrategy
+class SLASH_API BaseAttackStrategy : public ICharacterStrategy
 {
 public:
-	BaseAttackStrategy();
-	~BaseAttackStrategy();
 
-	virtual void Execute() override = 0;
+	virtual void Execute() override;
 };

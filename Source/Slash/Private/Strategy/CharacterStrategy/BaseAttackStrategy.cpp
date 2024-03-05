@@ -10,3 +10,8 @@ BaseAttackStrategy::BaseAttackStrategy()
 BaseAttackStrategy::~BaseAttackStrategy()
 {
 }
+
+void BaseAttackStrategy::Execute()
+{
+	
+}

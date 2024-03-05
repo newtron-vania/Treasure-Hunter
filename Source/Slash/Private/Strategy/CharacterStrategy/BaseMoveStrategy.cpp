@@ -11,3 +11,13 @@ BaseMoveStrategy::~BaseMoveStrategy()
 {
 }
 
+void BaseMoveStrategy::Execute()
+{
+	Move();
+}
+
+void BaseMoveStrategy::Move()
+{
+	
+}
+

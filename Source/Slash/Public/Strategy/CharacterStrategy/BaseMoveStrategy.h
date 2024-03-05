@@ -8,11 +8,14 @@
 /**
  * 
  */
-class SLASH_API BaseMoveStrategy : public CharacterStrategy
+class SLASH_API BaseMoveStrategy : public ICharacterStrategy
 {
 public:
-	BaseMoveStrategy();
-	~BaseMoveStrategy();
 
-	virtual void Execute() override = 0;
+	virtual void Execute() override ;
+	virtual void SetupInputBindings(UInputComponent* PlayerInputComponent) = 0;
+	virtual void ClearInputBindings(UInputComponent* PlayerInputComponent) = 0;
+
+private:
+	virtual void Move() = 0;
 };

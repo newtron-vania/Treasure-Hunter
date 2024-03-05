@@ -5,6 +5,9 @@
 #include "Interfaces/HitInterface.h"
 #include "BaseCharacter.generated.h"
 
+class BaseHitReactStrategy;
+class BaseMoveStrategy;
+class BaseAttackStrategy;
 class AWeapon;
 class UAttributeComponent;
 class UAnimMontage;
@@ -69,6 +72,13 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category=Combat)
 	double WarpTargetDistance = 75.f;
+
+	// Strategy
+	BaseAttackStrategy* AttackStrategy;
+
+	BaseMoveStrategy* MoveStrategy;
+
+	BaseHitReactStrategy* HitReactStrategy;
 private:
 	void PlayMontageSection(UAnimMontage* Montage, FName SectionName);
 	int32 PlayRandomMontageSection(UAnimMontage* Montage);

@@ -11,8 +11,6 @@
 class SLASH_API SimpleAttack : public BaseAttackStrategy
 {
 public:
-	SimpleAttack();
-	~SimpleAttack();
 
 	virtual void Execute() override;
 };
