@@ -6,16 +6,18 @@
 #include "Characters/BaseCharacter.h"
 #include "Characters/SlashCharacter.h"
 
-void USimplePlayerInputMoveStrategy::SetupInputBindings(UInputComponent* PlayerInputComponent)
+void USimplePlayerInputMoveStrategy::Initialize()
 {
+	UInputComponent* PlayerInputComponent =  Character->InputComponent;
 	PlayerInputComponent->BindAxis("MoveForward");
 	PlayerInputComponent->BindAxis("MoveRight");
 	PlayerInputComponent->BindAxis("TurnRight");
 	PlayerInputComponent->BindAxis("LookUp");
 }
 
-void USimplePlayerInputMoveStrategy::ClearInputBindings(UInputComponent* PlayerInputComponent)
+void USimplePlayerInputMoveStrategy::Clear()
 {
+	UInputComponent* PlayerInputComponent =  Character->InputComponent;
 	PlayerInputComponent->RemoveAxisBinding("MoveForward");
 	PlayerInputComponent->RemoveAxisBinding("MoveRight");
 	PlayerInputComponent->RemoveAxisBinding("TurnRight");

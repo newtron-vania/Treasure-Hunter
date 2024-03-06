@@ -18,8 +18,8 @@ class SLASH_API IMoveStrategy : public ICharacterStrategy
 public:
 
 	virtual void Execute() override ;
-	virtual void SetupInputBindings(UInputComponent* PlayerInputComponent) = 0;
-	virtual void ClearInputBindings(UInputComponent* PlayerInputComponent) = 0;
+	virtual void Initialize() = 0;
+	virtual void Clear() = 0;
 private:
 	virtual void Move() = 0;
 	

@@ -1,10 +1,12 @@
 #include "Characters/BaseCharacter.h"
+
 #include "Components/AttributeComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Items/Weapon.h"
 #include "Kismet/GameplayStatics.h"
 #include "Strategy/CharacterStrategy/MoveStrategy.h"
+
 
 ABaseCharacter::ABaseCharacter()
 {
@@ -184,9 +186,9 @@ void ABaseCharacter::StopAttackMontage()
 
 void ABaseCharacter::ChangeMoveStrategy(IMoveStrategy* MoveStrategy)
 {
-	this->MoveStrategy->ClearInputBindings(this->InputComponent);
+	this->MoveStrategy->Clear();
 	this->MoveStrategy = MoveStrategy;
-	this->MoveStrategy->SetupInputBindings(this->InputComponent);
+	this->MoveStrategy->Initialize();
 }
 
 FVector ABaseCharacter::GetTranslationWarpTarget()

@@ -14,8 +14,8 @@ class SLASH_API USimplePlayerInputMoveStrategy : public UObject, public IMoveStr
 {
 	GENERATED_BODY()
 	
-	virtual void SetupInputBindings(UInputComponent* PlayerInputComponent) override;
-	virtual void ClearInputBindings(UInputComponent* PlayerInputComponent) override;
+	virtual void Initialize() override;
+	virtual void Clear() override;
 
 private:
 	virtual void Move() override;
