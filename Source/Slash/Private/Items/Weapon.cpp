@@ -83,6 +83,8 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 
 	if (BoxHit.GetActor())
 	{
+		FString string = FString::Printf(TEXT("ME : %s Other : %s isSame : %s"), *GetOwner()->GetName(), *BoxHit.GetActor()->GetName(), ActorIsSameType(BoxHit.GetActor()) ? TEXT("true") : TEXT("false"));
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *string);
 		if (ActorIsSameType(BoxHit.GetActor())) return;
 
 		UGameplayStatics::ApplyDamage(BoxHit.GetActor(), Damage, GetInstigator()->GetController(), this, UDamageType::StaticClass());
@@ -112,6 +114,7 @@ void AWeapon::BoxTrace(FHitResult& BoxHit)
 
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(this);
+	ActorsToIgnore.Add(GetOwner());
 
 	for (AActor* Actor : IgnoreActors)
 	{
