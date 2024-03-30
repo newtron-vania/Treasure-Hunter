@@ -65,6 +65,8 @@ void AEnemy::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)
 	
 	SetWeaponCollisionEnabled(ECollisionEnabled::NoCollision);
 	StopAttackMontage();
+
+	EnemyState = EEnemyState::EES_Chasing;
 }
 
 /*

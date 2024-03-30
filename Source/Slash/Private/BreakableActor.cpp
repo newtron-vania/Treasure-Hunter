@@ -20,17 +20,19 @@ ABreakableActor::ABreakableActor()
 
 	Capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
 	Capsule->SetupAttachment(GetRootComponent());
+	
 	Capsule->SetCollisionResponseToAllChannels(ECR_Ignore);
 	Capsule->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
 }
 
 void ABreakableActor::GetHit_Implementation(const FVector& ImpactPoint, AActor* Hitter)
 {
-	PlayBreakSound();
 	if(bBroken) return;
 	bBroken = true;	
-
+	PlayBreakSound();
+	
 	UWorld* World = GetWorld();
+	GeometryCollection->EnableClustering = false;
 	if(World && TreasureClasses.Num() > 0)
 	{
 		FVector Location = GetActorLocation();
